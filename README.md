@@ -11,7 +11,7 @@ Depends on [Wavefront Sender](https://github.com/puckpuck.wavefront-sender)
 ### DataQuery
 
 Allows you to execute any Wavefront Query Language expression and return a list of
-MetricPoint objects (from Wavefront Sender).
+MetricPoint objects (from Wavefront Sender). The url is the base url of your wavefront server (e.g. try.wavefront.com). The token is the [API Token](https://docs.wavefront.com/wavefront_api.html#invoking-the-api) that you use to invoke Wavefront API. The query is the String representation of [Wavefront query language](https://docs.wavefront.com/query_language_reference.html).
 ```java
 // initialize with Wavefront URL and Token
 DataQuery dataQuery = new DataQuery(url, token);
