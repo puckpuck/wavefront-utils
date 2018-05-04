@@ -6,7 +6,7 @@ A small collection of utilities I have for working with Wavefront metrics.
 - MetricReader
 - MetricsFetcher
 
-Depends on [Wavefront Sender](https://github.com/puckpuck.wavefront-sender)
+Depends on [Wavefront Sender](https://github.com/puckpuck/wavefront-sender)
 
 ### DataQuery
 
