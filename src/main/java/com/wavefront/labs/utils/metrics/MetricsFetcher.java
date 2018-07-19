@@ -23,7 +23,7 @@ public class MetricsFetcher {
 	private Gson gson;
 	private OkHttpClient httpClient;
 
-	private void start(String[] args) {
+	public void start(String[] args) {
 
 		long startTime = System.currentTimeMillis();
 
@@ -107,6 +107,11 @@ public class MetricsFetcher {
 			}
 		}
 		return null;
+	}
+
+	public static void main(String[] args) {
+		MetricsFetcher metricsFetcher = new MetricsFetcher();
+		metricsFetcher.start(args);
 	}
 
 }
