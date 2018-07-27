@@ -30,7 +30,7 @@ public class DataQuery {
 
 		ArrayList<MetricPoint> metricPoints = new ArrayList();
 
-		if (queryResult != null) {
+		if (queryResult != null && queryResult.getTimeseries() != null) {
 			for (TimeseriesResult ts : queryResult.getTimeseries()) {
 				for (ArrayList<Double> data : ts.getData()) {
 					MetricPoint metricPoint = new MetricPoint();
