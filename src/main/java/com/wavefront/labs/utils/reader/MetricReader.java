@@ -36,42 +36,8 @@ public class MetricReader {
 	}
 
 	private void processLine(String line) {
-
-
-		String[] parts = line.split(" ");
-		MetricPoint metricPoint = new MetricPoint();
-
-		metricPoint.setMetric(parts[0]);
-		metricPoint.setValue(Double.valueOf(parts[1]));
-		metricPoint.setTimestamp(Long.valueOf(parts[2]));
-
-		for (int i = 3; i < parts.length; i++) {
-			if (!parts[i].equals("")) {
-				String[] tagParts = stripQuotes(parts[i].split("="));
-				if (tagParts[0].equals("source") || tagParts[0].equals("host")) {
-					metricPoint.setSource(tagParts[1]);
-				} else {
-					metricPoint.addTag(tagParts[0], tagParts[1]);
-				}
-			}
-		}
-
+		MetricPoint metricPoint = MetricPointParser.parseLine(line);
 		metricPoints.add(metricPoint);
-
 	}
 
-	private String[] stripQuotes(String[] vals) {
-		for (int i = 0; i < vals.length; i++) {
-			vals[i] = stripQuotes(vals[i]);
-		}
-		return vals;
-	}
-
-	private String stripQuotes(String val) {
-		if (val.startsWith("\"")) {
-			return val.substring(1, val.length() - 1);
-		} else {
-			return val;
-		}
-	}
 }
