@@ -67,7 +67,7 @@ public class DataQuery {
 			url += "&summarization=MEAN";
 			url += "&listMode=false";
 			url += "&strict=true";
-			if (isObsoleteTime(end) || isObsoleteTime(start)) {
+			if (isObsoleteTime(start)) {
 				url += "&includeObsoleteMetrics=true";
 			}
 			url += "&sorted=false";
