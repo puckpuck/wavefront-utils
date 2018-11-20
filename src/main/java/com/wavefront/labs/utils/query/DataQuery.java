@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataQuery {
 
@@ -25,8 +27,12 @@ public class DataQuery {
 
 
 	public List<MetricPoint> executeQuery(String query, long start, long end) {
+		return executeQuery(query, start, end, null);
+	}
 
-		QueryResult queryResult = getQueryResults(query, start, end);
+	public List<MetricPoint> executeQuery(String query, long start, long end, Map<String, String> queryArgs) {
+
+		QueryResult queryResult = getQueryResults(query, start, end, queryArgs);
 
 		ArrayList<MetricPoint> metricPoints = new ArrayList();
 
@@ -47,35 +53,43 @@ public class DataQuery {
 		return metricPoints;
 	}
 
-	private QueryResult getQueryResults(String query, long start, long end) {
+	private QueryResult getQueryResults(String query, long start, long end, Map<String, String> queryArgs) {
 		try {
-
-			
 
 			String encodedQuery = new URI(null, null, query, null).getRawPath().replaceAll("\\+", "%2B");
 
-			String url = baseURL + "/api/v2/chart/api";
-			url += "?n=DataQuery";
-			url += "&q=" + encodedQuery;
-			url += "&s=" + start;
+			HashMap<String, String> args = new HashMap();
+			args.put("n", "DataQuery");
+			args.put("g", "s");
+			args.put("i", "false");
+			args.put("autoEvents", "false");
+			args.put("summarization", "MEAN");
+			args.put("listMode", "false");
+			args.put("strict", "true");
+			args.put("sorted", "false");
+
+			if (queryArgs != null) {
+				args.putAll(queryArgs);
+			}
+
+			args.put("q", encodedQuery);
+			args.put("s", "" + start);
 			if (end != 0) {
-				url += "&e=" + end;
+				args.put("e", "" + end);
 			}
-			url += "&g=s";
-			url += "&i=false";
-			url += "&autoEvents=false";
-			url += "&summarization=MEAN";
-			url += "&listMode=false";
-			url += "&strict=true";
 			if (isObsoleteTime(start)) {
-				url += "&includeObsoleteMetrics=true";
+				args.put("includeObsoleteMetrics", "true");
 			}
-			url += "&sorted=false";
+
+			StringBuilder url = new StringBuilder(baseURL + "/api/v2/chart/api?");
+			args.forEach((k, v) -> {
+				url.append(k + "=" + v + "&");
+			});
 
 			OkHttpClient httpClient = new OkHttpClient();
 			Request request = new Request.Builder()
-					.addHeader("X-AUTH-TOKEN", token)
-					.url(url)
+					.addHeader("Authorization", "Bearer " + token)
+					.url(url.toString())
 					.get()
 					.build();
 			try (Response response = httpClient.newCall(request).execute()) {
