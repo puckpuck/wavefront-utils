@@ -77,7 +77,7 @@ public class DataQuery {
 			if (end != 0) {
 				args.put("e", "" + end);
 			}
-			if (isObsoleteTime(start)) {
+			if (isObsoleteTime(start) && (queryArgs == null || !queryArgs.containsKey("includeObsoleteMetrics"))) {
 				args.put("includeObsoleteMetrics", "true");
 			}
 
@@ -112,8 +112,10 @@ public class DataQuery {
 			return false;
 		}
 
-		long obsoleteSpan = 28 * 24 * 60 * 60;
-		long current = System.currentTimeMillis() / 1000;
+		boolean isSeconds = (time < 1859388107);
+
+		long obsoleteSpan = 28L * 86400 * (isSeconds ? 1 : 1000);
+		long current = System.currentTimeMillis() / (isSeconds ? 1000 : 1);
 		return (time + obsoleteSpan < current);
 	}
 }
