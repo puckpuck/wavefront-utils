@@ -112,7 +112,7 @@ public class DataQuery {
 			return false;
 		}
 
-		boolean isSeconds = (time < 1859388107);
+		boolean isSeconds = (time < 1e10);
 
 		long obsoleteSpan = 28L * 86400 * (isSeconds ? 1 : 1000);
 		long current = System.currentTimeMillis() / (isSeconds ? 1000 : 1);
