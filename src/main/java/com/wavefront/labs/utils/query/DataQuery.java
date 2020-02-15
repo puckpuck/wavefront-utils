@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class DataQuery {
 
@@ -86,7 +87,9 @@ public class DataQuery {
 				url.append(k + "=" + v + "&");
 			});
 
-			OkHttpClient httpClient = new OkHttpClient();
+			OkHttpClient httpClient = new OkHttpClient.Builder()
+					.readTimeout(30, TimeUnit.SECONDS)
+					.build();
 			Request request = new Request.Builder()
 					.addHeader("Authorization", "Bearer " + token)
 					.url(url.toString())
@@ -98,7 +101,7 @@ public class DataQuery {
 			} catch (IOException | NullPointerException | JsonSyntaxException e) {
 				e.printStackTrace();
 			}
-			
+
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
